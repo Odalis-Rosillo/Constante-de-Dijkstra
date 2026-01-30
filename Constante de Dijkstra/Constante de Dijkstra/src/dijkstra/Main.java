@@ -7,22 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    // Códigos de colores ANSI
     private static final String RESET = "\u001B[0m";
-
-    // Colores para títulos de menús
     private static final String COLOR_TITULO = "\u001B[38;2;165;77;143m"; // #a54d8f
-
-    // Colores para opciones de menús
     private static final String COLOR_OPCION = "\u001B[38;2;120;124;236m"; // #787cec
 
-    // Colores para resultados exitosos
     private static final String COLOR_EXITO_1 = "\u001B[38;2;117;156;253m"; // #759cfd
     private static final String COLOR_EXITO_2 = "\u001B[38;2;185;83;166m"; // #b953a6
     private static final String COLOR_EXITO_3 = "\u001B[38;2;8;150;193m";  // #0896c1
     private static final String COLOR_EXITO_4 = "\u001B[38;2;170;158;224m"; // #aa9ee0
 
-    // Colores adicionales
     private static final String COLOR_INFO = "\u001B[38;2;72;201;176m";    // #48c9b0
     private static final String COLOR_ADVERTENCIA = "\u001B[38;2;255;193;7m"; // #ffc107
     private static final String COLOR_ERROR = "\u001B[38;2;220;53;69m";    // #dc3545
@@ -30,7 +23,7 @@ public class Main {
     private static final String COLOR_SECUNDARIO = "\u001B[38;2;108;117;125m"; // #6c757d
     private static final String COLOR_TABLA = "\u001B[38;2;52;152;219m";    // #3498db
 
-    private static int totalAristasArchivo = 0; // Para guardar el número de aristas del archivo
+    private static int totalAristasArchivo = 0;
     private static Graph graph = null;
     private static File selectedFile = null;
 
@@ -51,7 +44,6 @@ public class Main {
                 return;
             }
 
-            // Menú principal
             int opcionPrincipal = menuPrincipal();
 
             switch (opcionPrincipal) {
@@ -65,11 +57,10 @@ public class Main {
                     showGraphInfo(selectedFile, graph);
                     printGraphWithEdgeInfo(graph);
 
-                    // Ir directamente al menú de Dijkstra
                     menuDijkstra();
                     break;
 
-                case 2: // Ejecutar Dijkstra (si ya hay un grafo cargado)
+                case 2:
                     if (graph == null) {
                         System.out.println(COLOR_ADVERTENCIA + "\n  Primero debes cargar un archivo de grafo." + RESET);
                         System.out.println(COLOR_SECUNDARIO + "Por favor, selecciona la opción 1.\n" + RESET);
@@ -78,7 +69,7 @@ public class Main {
                     menuDijkstra();
                     break;
 
-                case 3: // Ver información del grafo actual
+                case 3:
                     if (graph == null) {
                         System.out.println(COLOR_ADVERTENCIA + "\n  No hay ningún grafo cargado." + RESET);
                         System.out.println(COLOR_SECUNDARIO + "Por favor, selecciona la opción 1 para cargar un archivo.\n" + RESET);
@@ -88,7 +79,7 @@ public class Main {
                     printGraphWithEdgeInfo(graph);
                     break;
 
-                case 4: // Salir
+                case 4:
                     salir = true;
                     System.out.println(COLOR_EXITO_4 + "\n Gracias y Bendiciones Abundantes." + RESET);
                     break;
@@ -99,9 +90,6 @@ public class Main {
         }
     }
 
-    /**
-     * Menú principal del programa
-     */
     private static int menuPrincipal() {
         Scanner scanner = new Scanner(System.in);
 
@@ -142,9 +130,7 @@ public class Main {
         }
     }
 
-    /**
-     * Menú para ejecutar Dijkstra
-     */
+
     private static void menuDijkstra() {
         Scanner scanner = new Scanner(System.in);
         boolean volverMenuPrincipal = false;
@@ -169,13 +155,13 @@ public class Main {
                 int choice = scanner.nextInt();
 
                 switch (choice) {
-                    case 1: // Ejecutar Dijkstra completo desde nodo 0 hasta último nodo
+                    case 1:
                         executeDijkstraCompleto(graph, 0);
                         break;
-                    case 2: // Elegir nodo origen y destino específicos
+                    case 2:
                         seleccionarOrigenDestino();
                         break;
-                    case 3: // Volver al menú principal
+                    case 3:
                         volverMenuPrincipal = true;
                         System.out.println(COLOR_EXITO_3 + "\n  Volviendo al menú principal...\n" + RESET);
                         break;
@@ -189,9 +175,6 @@ public class Main {
         }
     }
 
-    /**
-     * Permite al usuario seleccionar nodo origen y destino
-     */
     private static void seleccionarOrigenDestino() {
         Scanner scanner = new Scanner(System.in);
         int maxNode = graph.getNumVertices() - 1;
@@ -199,7 +182,6 @@ public class Main {
         System.out.println(COLOR_EXITO_2 + "\n SELECCIÓN DE ORIGEN Y DESTINO" + RESET);
         System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
 
-        // Seleccionar nodo origen
         int origen = -1;
         while (origen == -1) {
             System.out.print(COLOR_EXITO_1 + "Ingresa el nodo ORIGEN (0-" + maxNode + "): " + RESET);
@@ -215,7 +197,6 @@ public class Main {
             }
         }
 
-        // Seleccionar nodo destino
         int destino = -1;
         while (destino == -1) {
             System.out.print(COLOR_EXITO_1 + "Ingresa el nodo DESTINO (0-" + maxNode + ", diferente de " + origen + "): " + RESET);
@@ -234,24 +215,19 @@ public class Main {
             }
         }
 
-        // Ejecutar Dijkstra para el origen y destino específicos
         executeDijkstraEspecifico(graph, origen, destino);
     }
 
-    /**
-     * Ejecuta Dijkstra desde un nodo específico hacia un destino específico
-     */
+
     private static void executeDijkstraEspecifico(Graph graph, int origen, int destino) {
         System.out.println(COLOR_EXITO_4 + "\n" + "━".repeat(60) + RESET);
         System.out.println(COLOR_EXITO_4 + "  DIJKSTRA ESPECÍFICO" + RESET);
         System.out.println(COLOR_EXITO_4 + "Origen: Nodo " + origen + " → Destino: Nodo " + destino + RESET);
         System.out.println(COLOR_EXITO_4 + "━".repeat(60) + RESET + "\n");
 
-        // Mostrar información de los nodos seleccionados
         System.out.println(COLOR_EXITO_2 + " INFORMACIÓN DE LOS NODOS SELECCIONADOS:" + RESET);
         System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET);
 
-        // Información del nodo origen
         List<Graph.Edge> aristasOrigen = graph.getAdjacentEdges(origen);
         System.out.println(COLOR_INFO + "Nodo ORIGEN " + origen + ":" + RESET);
         System.out.println(COLOR_INFO + "  • Conexiones directas: " + aristasOrigen.size() +
@@ -265,7 +241,6 @@ public class Main {
 
         System.out.println();
 
-        // Información del nodo destino
         List<Graph.Edge> aristasDestino = graph.getAdjacentEdges(destino);
         System.out.println(COLOR_INFO + "Nodo DESTINO " + destino + ":" + RESET);
         System.out.println(COLOR_INFO + "  • Conexiones directas: " + aristasDestino.size() +
@@ -279,12 +254,10 @@ public class Main {
 
         System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET + "\n");
 
-        // Crear e ejecutar Dijkstra desde el origen
         System.out.println(COLOR_EXITO_3 + "⚡ Calculando camino más corto...\n" + RESET);
         Dijkstra dijkstra = new Dijkstra(graph);
         dijkstra.execute(origen);
 
-        // Verificar si el destino es alcanzable
         if (!dijkstra.isReachable(destino)) {
             System.out.println(COLOR_ERROR + " NO HAY CAMINO DISPONIBLE" + RESET);
             System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
@@ -292,13 +265,12 @@ public class Main {
                     " no es alcanzable desde el nodo origen " + origen + RESET);
             System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
         } else {
-            // Mostrar distancias desde el origen
+
             System.out.println(COLOR_EXITO_1 + " DISTANCIAS DESDE EL NODO " + origen + ":" + RESET);
             System.out.println(COLOR_SECUNDARIO + "═".repeat(40) + RESET);
             dijkstra.printDistances();
             System.out.println(COLOR_SECUNDARIO + "═".repeat(40) + RESET + "\n");
 
-            // Mostrar el camino específico al destino
             System.out.println(COLOR_EXITO_2 + " CAMINO MÁS CORTO ESPECÍFICO:" + RESET);
             System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET);
             System.out.println(COLOR_TABLA + "Desde: Nodo " + origen + RESET);
@@ -309,14 +281,12 @@ public class Main {
 
             System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET + "\n");
 
-            // Mostrar información adicional del camino
             int distancia = dijkstra.getDistances()[destino];
             System.out.println(COLOR_EXITO_3 + " INFORMACIÓN ADICIONAL:" + RESET);
             System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
             System.out.println(COLOR_INFO + "• Distancia total: " + RESET +
                     COLOR_DESTACADO + distancia + RESET + COLOR_INFO + " unidades" + RESET);
 
-            // Calcular número de nodos intermedios
             int[] pred = dijkstra.getPredecessors();
             int nodosIntermedios = 0;
             int current = destino;
@@ -325,7 +295,7 @@ public class Main {
                 current = pred[current];
             }
             if (nodosIntermedios > 0) {
-                nodosIntermedios--; // Restar el nodo destino
+                nodosIntermedios--;
             }
 
             System.out.println(COLOR_INFO + "• Nodos intermedios: " + RESET +
@@ -336,7 +306,6 @@ public class Main {
             System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
         }
 
-        // Preguntar si quiere continuar
         System.out.print(COLOR_EXITO_2 + "\n¿Deseas buscar otro camino específico? (s/n): " + RESET);
         Scanner scanner = new Scanner(System.in);
         String respuesta = scanner.next().toLowerCase();
@@ -346,9 +315,6 @@ public class Main {
         }
     }
 
-    /**
-     * Ejecuta Dijkstra completo desde nodo 0 hasta el último nodo
-     */
     private static void executeDijkstraCompleto(Graph graph, int startNode) {
         int ultimoNodo = graph.getNumVertices() - 1;
 
@@ -357,18 +323,18 @@ public class Main {
         System.out.println(COLOR_EXITO_4 + "Desde: Nodo " + startNode + " → Hasta: Nodo " + ultimoNodo + RESET);
         System.out.println(COLOR_EXITO_4 + "━".repeat(70) + RESET + "\n");
 
-        // Crear e ejecutar Dijkstra
+
         System.out.println(COLOR_EXITO_3 + "⚡ Calculando todos los caminos más cortos...\n" + RESET);
         Dijkstra dijkstra = new Dijkstra(graph);
         dijkstra.execute(startNode);
 
-        // Mostrar todas las distancias
+
         System.out.println(COLOR_EXITO_1 + " DISTANCIAS MÍNIMAS DESDE EL NODO " + startNode + ":" + RESET);
         System.out.println(COLOR_SECUNDARIO + "═".repeat(40) + RESET);
         dijkstra.printDistances();
         System.out.println(COLOR_SECUNDARIO + "═".repeat(40) + RESET + "\n");
 
-        // Mostrar caminos a TODOS los nodos
+
         System.out.println(COLOR_EXITO_2 + " CAMINOS MÁS CORTOS A TODOS LOS NODOS:" + RESET);
         System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET);
 
@@ -382,7 +348,6 @@ public class Main {
 
         System.out.println(COLOR_SECUNDARIO + "─".repeat(50) + RESET + "\n");
 
-        // Mostrar tabla resumen de todos los caminos
         System.out.println(COLOR_EXITO_4 + " RESUMEN COMPLETO DE CAMINOS:" + RESET);
         System.out.println(COLOR_SECUNDARIO + "=".repeat(70) + RESET);
 
@@ -402,7 +367,7 @@ public class Main {
                         COLOR_EXITO_1 + String.valueOf(dijkstra.getDistances()[i]) + RESET :
                         COLOR_ERROR + "INF" + RESET;
 
-                // Reconstruir camino para mostrar
+
                 String camino = "";
                 if (alcanzable) {
                     int[] pred = dijkstra.getPredecessors();
@@ -463,9 +428,17 @@ public class Main {
         System.out.println(COLOR_INFO + "• Nodos inalcanzables: " + RESET +
                 (inalcanzables > 0 ? COLOR_ERROR : COLOR_SECUNDARIO) + inalcanzables + RESET);
 
+
+        int caminoMasCortoDist = Integer.MAX_VALUE;
+        int caminoMasLargoDist = 0;
+        int nodoCaminoMasCorto = -1;
+        int nodoCaminoMasLargo = -1;
+        String rutaCaminoMasCorto = "";
+        String rutaCaminoMasLargo = "";
+
         if (alcanzables > 0) {
-            // Encontrar nodo más cercano y más lejano
             int[] distancias = dijkstra.getDistances();
+            int[] pred = dijkstra.getPredecessors();
             int minDist = Integer.MAX_VALUE;
             int maxDist = 0;
             int nodoCercano = -1;
@@ -481,6 +454,19 @@ public class Main {
                         maxDist = distancias[i];
                         nodoLejano = i;
                     }
+
+
+                    if (distancias[i] < caminoMasCortoDist) {
+                        caminoMasCortoDist = distancias[i];
+                        nodoCaminoMasCorto = i;
+                        // Reconstruir ruta del camino más corto
+                        rutaCaminoMasCorto = reconstruirCamino(pred, startNode, i);
+                    }
+                    if (distancias[i] > caminoMasLargoDist) {
+                        caminoMasLargoDist = distancias[i];
+                        nodoCaminoMasLargo = i;
+                        rutaCaminoMasLargo = reconstruirCamino(pred, startNode, i);
+                    }
                 }
             }
 
@@ -491,15 +477,31 @@ public class Main {
                     COLOR_TABLA + nodoLejano + RESET + COLOR_INFO + " (distancia: " + RESET +
                     COLOR_EXITO_1 + maxDist + COLOR_INFO + ")" + RESET);
 
-            // Información del camino al último nodo
+            // AGREGADO: Mostrar información de caminos más corto y más largo
+            System.out.println(COLOR_EXITO_3 + "\n ANÁLISIS DE CAMINOS:" + RESET);
+            System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
+
+            if (nodoCaminoMasCorto != -1) {
+                System.out.println(COLOR_INFO + "• Camino más corto: " + RESET);
+                System.out.println(COLOR_EXITO_1 + "  Destino: Nodo " + nodoCaminoMasCorto + RESET);
+                System.out.println(COLOR_EXITO_2 + "  Distancia: " + caminoMasCortoDist + " unidades" + RESET);
+                System.out.println(COLOR_TABLA + "  Ruta: " + rutaCaminoMasCorto + RESET);
+            }
+
+            if (nodoCaminoMasLargo != -1) {
+                System.out.println(COLOR_INFO + "• Camino más largo: " + RESET);
+                System.out.println(COLOR_EXITO_1 + "  Destino: Nodo " + nodoCaminoMasLargo + RESET);
+                System.out.println(COLOR_EXITO_2 + "  Distancia: " + caminoMasLargoDist + " unidades" + RESET);
+                System.out.println(COLOR_TABLA + "  Ruta: " + rutaCaminoMasLargo + RESET);
+            }
+
             if (dijkstra.isReachable(ultimoNodo)) {
-                System.out.println(COLOR_INFO + "• Camino al último nodo (" + ultimoNodo + "): " + RESET +
+                System.out.println(COLOR_INFO + "\n• Camino al último nodo (" + ultimoNodo + "): " + RESET +
                         COLOR_EXITO_1 + distancias[ultimoNodo] + COLOR_INFO + " unidades" + RESET);
             }
         }
         System.out.println(COLOR_SECUNDARIO + "─".repeat(40) + RESET);
 
-        // Preguntar si quiere continuar
         System.out.print(COLOR_EXITO_2 + "\n¿Deseas realizar otra operación? (s/n): " + RESET);
         Scanner scanner = new Scanner(System.in);
         String respuesta = scanner.next().toLowerCase();
@@ -509,13 +511,33 @@ public class Main {
         }
     }
 
-    /**
-     * Busca archivos .txt en las carpetas de recursos
-     */
+
+    private static String reconstruirCamino(int[] pred, int startNode, int destino) {
+        StringBuilder camino = new StringBuilder();
+        int current = destino;
+        java.util.List<Integer> ruta = new java.util.ArrayList<>();
+
+        while (current != -1) {
+            ruta.add(current);
+            current = pred[current];
+        }
+
+
+        for (int i = ruta.size() - 1; i >= 0; i--) {
+            camino.append(ruta.get(i));
+            if (i > 0) {
+                camino.append(" → ");
+            }
+        }
+
+        return camino.toString();
+    }
+
+
     private static List<File> findTxtFilesInResources() {
         List<File> txtFiles = new ArrayList<>();
 
-        // Directorios posibles donde buscar
+
         String[] possiblePaths = {
                 "src/resources",
                 "resources",
@@ -541,9 +563,6 @@ public class Main {
         return txtFiles;
     }
 
-    /**
-     * Menú para seleccionar archivo de entrada
-     */
     private static File selectFileMenu(List<File> txtFiles) {
         Scanner scanner = new Scanner(System.in);
 
@@ -581,9 +600,6 @@ public class Main {
         }
     }
 
-    /**
-     * Carga el grafo desde un archivo
-     */
     private static Graph loadGraphFromFile(File file) {
         try {
             Scanner scanner = new Scanner(file);
@@ -597,10 +613,9 @@ public class Main {
             System.out.println(COLOR_INFO + "  Nodos en archivo: " + n + RESET);
             System.out.println(COLOR_INFO + "  Aristas en archivo: " + totalAristasArchivo + RESET);
 
-            // Crear el grafo
             Graph graph = new Graph(n);
 
-            // Leer todas las aristas
+
             int aristasLeidas = 0;
             for (int i = 0; i < totalAristasArchivo; i++) {
                 int u = scanner.nextInt();
@@ -630,9 +645,6 @@ public class Main {
         }
     }
 
-    /**
-     * Muestra la información del grafo cargado
-     */
     private static void showGraphInfo(File file, Graph graph) {
         System.out.println(COLOR_EXITO_4 + "\n" + "━".repeat(50) + RESET);
         System.out.println(COLOR_EXITO_4 + "GRAFO CARGADO EXITOSAMENTE" + RESET);
@@ -644,9 +656,7 @@ public class Main {
         System.out.println(COLOR_EXITO_4 + "━".repeat(50) + RESET);
     }
 
-    /**
-     * Muestra la representación del grafo con información de aristas por nodo
-     */
+
     private static void printGraphWithEdgeInfo(Graph graph) {
         System.out.println(COLOR_EXITO_3 + "\n REPRESENTACIÓN DEL GRAFO:" + RESET);
         System.out.println(COLOR_SECUNDARIO + "═".repeat(60) + RESET);
@@ -690,9 +700,6 @@ public class Main {
         System.out.println(COLOR_SECUNDARIO + "═".repeat(60) + RESET + "\n");
     }
 
-    /**
-     * Permite al usuario seleccionar un nodo origen personalizado
-     */
     private static int selectCustomStartNode(int maxNode) {
         Scanner scanner = new Scanner(System.in);
 
@@ -719,12 +726,7 @@ public class Main {
         }
     }
 
-    /**
-     * Ejecuta el algoritmo de Dijkstra y muestra los resultados
-     * (Método original para compatibilidad)
-     */
     private static void executeDijkstra(Graph graph, int startNode) {
-        // Por compatibilidad, llama al método completo
         executeDijkstraCompleto(graph, startNode);
     }
 }
